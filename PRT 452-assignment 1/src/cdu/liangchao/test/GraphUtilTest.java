@@ -2,10 +2,13 @@ package cdu.liangchao.test;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import cdu.liangchao.model.Graph;
+import cdu.liangchao.model.GraphException;
+import cdu.liangchao.util.GraphUtil;
 
 public class GraphUtilTest {
 //  g1:connected undirected graph
@@ -15,75 +18,77 @@ public class GraphUtilTest {
 //	g5:unilaterally connected graph;
 //	g6:strongly connected graph
 //	g7:unconnected directed graph	
-	private GraphUtil gu;
-	private Graph g1;
-	private Graph g2;
-	private Graph g3;
-	private Graph g4;
-	private Graph g5;
-	private Graph g6;
-	private Graph g7;
+	private static GraphUtil gu;
+	private static Graph g1;
+	private static Graph g2;
+	private static Graph g3;
+	private static Graph g4;
+	private static Graph g5;
+	private static Graph g6;
+	private static Graph g7;
 
 	
 	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	public static void setUpBeforeClass() {
 		int t=1;
 		int v=3;
 		int[][] e= {{0,1,0},{1,0,1},{0,1,0}};
-		 g1=new graph(t,v,e);
+		 g1=new Graph(t,v,e);
 		e=null;
 		e= new int[][]{{0,0,0},{0,0,1},{0,1,0}};
-		g2=new graph(t,v,e);
+		g2=new Graph(t,v,e);
 		e=null;
 		e= new int[][]{{0,0,0},{1,0,1},{0,1,0}};
-		 g3=new graph(t,v,e);
+		 g3=new Graph(t,v,e);
 		 t=2;
 		e=null;
 		e= new int[][]{{0,1,0},{0,0,0},{0,1,0}};
-		 g4=new graph(t,v,e);
+		 g4=new Graph(t,v,e);
 		
 		e=null;
 		e= new int[][]{{0,1,0},{0,0,1},{0,0,0}};
-		 g5=new graph(t,v,e);
+		 g5=new Graph(t,v,e);
 			
 		e=null;
 		e= new int[][]{{0,1,0},{0,0,1},{1,0,0}};
-		g6=new graph(t,v,e);
+		g6=new Graph(t,v,e);
 		
 		e=null;
 		e= new int[][]{{0,0,0},{0,0,1},{1,0,0}};
-		 g7=new graph(t,v,e);
-		
+		 g7=new Graph(t,v,e);
+	     gu= new GraphUtil();
 	}
 
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-		fail("Not yet implemented");
-	}
+	
   boolean[] initVisited(boolean[] visited,int v) {
 	  for (int i = 0; i < v; i++)
           visited[i] = false;
+	  return visited;
   }
 	@Test
 	public void testDFSUtil() {
 		int v=g1.getVertex();
+		int[][] e=g1.getEdge();
 		boolean visited[] = new boolean[v];
       visited=initVisited(visited,v);
-        gu.DFSUtil(0,visited,g1);
+        gu.DFSUtil(0,visited,e);
         for (int i = 0; i < v; i++)
     	assertTrue(visited[i]);
         
-        int v=g2.getVertex();
+         v=g2.getVertex();
+         e=g2.getEdge();
         visited=initVisited(visited,v);
-        gu.DFSUtil(0,visited,g2);
-        assertFalse(visited[0]);
+        gu.DFSUtil(0,visited,e);
+        assertFalse(visited[1]);
+        assertFalse(visited[2]);
         
 	}
 
 	@Test
 	public void testAdj() {
 	 int[][] e=g1.getEdge();
-	   int a=gu.adj(0,e);
+	 boolean[] visited= {true,false,false};
+	   int a=gu.adj(0,e,visited);
 	   assertEquals(a, 1);
 	}
 	
@@ -100,12 +105,12 @@ public class GraphUtilTest {
   		e[j][i]=a;
   		}
       }
-      assertArrayEquals(gr.getEdge, e);
+      assertArrayEquals(gr.getEdge(), e);
 	}
 	
 	@Test
 	public void testDirected2Undirected() {
-		Graph gc=gu.directed2Undirevted();
+		Graph gc=gu.directed2Undirected(g4);
 		int[][] e=g4.getEdge();
 		int v=g4.getVertex();
 		for(int i=0;i<v;i++) {
@@ -114,7 +119,7 @@ public class GraphUtilTest {
 	  		e[j][i]=e[i][j];
 	  		}
 	      }
-	      assertArrayEquals(gc.getEdge, e);
+	      assertArrayEquals(gc.getEdge(), e);
 	}
 	
 	@Test(expected=GraphException.class)
@@ -124,7 +129,8 @@ public class GraphUtilTest {
 	
 	@Test(expected=GraphException.class)
 	public void testCheckInputLength() {
-		gu.checkInputLength(4,g1);
+		int v=g1.getVertex();
+		gu.checkInputLength(4,v);
 	}
 	
 	
