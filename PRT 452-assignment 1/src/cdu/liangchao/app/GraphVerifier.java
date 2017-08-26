@@ -11,7 +11,8 @@ public class GraphVerifier {
 	public static void main(String[] args) {
 		 GraphUtil gu=new GraphUtil();
 	      
-		  Scanner scan = new Scanner(System.in);
+		  @SuppressWarnings("resource")
+		Scanner scan = new Scanner(System.in);
 	        System.out.println("Enter number of Types (1.undirected graph   2.directed graph)");
             int t=scan.nextInt();
 	        System.out.println("Enter number of Vertices");
