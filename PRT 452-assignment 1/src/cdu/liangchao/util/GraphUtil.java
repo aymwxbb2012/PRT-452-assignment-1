@@ -40,14 +40,24 @@ public class GraphUtil {
 		 }  
       //turn directed graph to undirected graph
 	  public Graph directed2Undirected(Graph g) {
-	    	int[][] e=g.getEdge();
-			int v=g.getVertex();
+	    	int[][] d=g.getEdge();
+	    	int v=g.getVertex();
+	    	int[][] e= new int[v][v];
+	    	
+	    	
+	    	for(int a=0;a<v;a++) {
+		  		for(int b=0;b<v;b++) {
+		  			e[a][b]=d[a][b];
+		  		}
+	    	
+			
 			for(int i=0;i<v;i++) {
 		  		for(int j=0;j<v;j++) {
 		  			if(e[i][j]>0)
 		  		e[j][i]=e[i][j];
 		  		}
 	    }
+	    	}
 			Graph gc= new Graph(g.getType(),v,e);
 			return gc;
 	    }
@@ -55,15 +65,25 @@ public class GraphUtil {
 	    // get transpose of the graph
 	  public  Graph getTranspose(Graph g)
 	    {
+		  int[][] d=g.getEdge();
 	    	int v=g.getVertex();
-	    	int[][] e=g.getEdge();
 	    	int t=g.getType();
-	        
+	    	int[][] e= new int[v][v];
+	    	
+	    	
+	    	for(int a=0;a<v;a++) {
+		  		for(int b=0;b<v;b++) {
+		  			e[a][b]=d[a][b];
+		  		}
+	    	}
 	        for(int i=0;i<v;i++) {
-        		for(int j=0;j<v;j++) {
-        		e[i][j]=e[j][i];
+        		for(int j=i;j<v;j++) {
+        		int c=e[j][i];	
+        		e[j][i]=e[i][j];
+        		e[i][j]=c;
         		}
-        	}
+	        }
+	        
 	        Graph gr = new Graph(t,v,e);
 	        return gr;
 	    }

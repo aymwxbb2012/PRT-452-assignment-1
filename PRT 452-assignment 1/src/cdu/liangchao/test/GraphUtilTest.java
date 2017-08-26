@@ -54,7 +54,7 @@ public class GraphUtilTest {
 		g6=new Graph(t,v,e);
 		
 		e=null;
-		e= new int[][]{{0,0,0},{0,0,1},{1,0,0}};
+		e= new int[][]{{0,0,0},{0,0,1},{0,0,0}};
 		 g7=new Graph(t,v,e);
 	     gu= new GraphUtil();
 	}
@@ -95,14 +95,22 @@ public class GraphUtilTest {
 	@Test
 	public void testGetTranspose() {
 	  Graph gr=gu.getTranspose(g1);
-      int[][] e=g1.getEdge();
+     
       int v=g1.getVertex();
-      int a;
+     
+      int[][] d=g1.getEdge();
+      int[][] e= new int[v][v];
+  	 for(int a=0;a<v;a++) {
+	  		for(int b=0;b<v;b++) {
+	  			e[a][b]=d[a][b];
+	  		}
+  	 }
       for(int i=0;i<v;i++) {
   		for(int j=i;j<v;j++) {
-  	    a=e[i][j];
+  		int c;
+  	    c=e[i][j];
   		e[i][j]=e[j][i];
-  		e[j][i]=a;
+  		e[j][i]=c;
   		}
       }
       assertArrayEquals(gr.getEdge(), e);
@@ -111,8 +119,14 @@ public class GraphUtilTest {
 	@Test
 	public void testDirected2Undirected() {
 		Graph gc=gu.directed2Undirected(g4);
-		int[][] e=g4.getEdge();
-		int v=g4.getVertex();
+		  int[][] d=g1.getEdge();
+		  int v=g4.getVertex();
+	      int[][] e= new int[v][v];
+	  	 for(int a=0;a<v;a++) {
+		  		for(int b=0;b<v;b++) {
+		  			e[a][b]=d[a][b];
+		  		}
+	  	 }
 		for(int i=0;i<v;i++) {
 	  		for(int j=0;j<v;j++) {
 	  			if(e[i][j]>0)
