@@ -39,11 +39,11 @@ public class GraphUtilTest {
 		 g3=new graph(t,v,e);
 		 t=2;
 		e=null;
-		e= new int[][]{{0,1,0},{0,0,1},{0,0,0}};
+		e= new int[][]{{0,1,0},{0,0,0},{0,1,0}};
 		 g4=new graph(t,v,e);
 		
 		e=null;
-		e= new int[][]{{0,1,1},{0,0,1},{0,0,0}};
+		e= new int[][]{{0,1,0},{0,0,1},{0,0,0}};
 		 g5=new graph(t,v,e);
 			
 		e=null;
@@ -92,12 +92,29 @@ public class GraphUtilTest {
 	  Graph gr=gu.getTranspose(g1);
       int[][] e=g1.getEdge();
       int v=g1.getVertex();
+      int a;
       for(int i=0;i<v;i++) {
-  		for(int j=0;j<v;j++) {
+  		for(int j=i;j<v;j++) {
+  	    a=e[i][j];
   		e[i][j]=e[j][i];
+  		e[j][i]=a;
   		}
       }
       assertArrayEquals(gr.getEdge, e);
+	}
+	
+	@Test
+	public void testDirected2Undirected() {
+		Graph gc=gu.directed2Undirevted();
+		int[][] e=g4.getEdge();
+		int v=g4.getVertex();
+		for(int i=0;i<v;i++) {
+	  		for(int j=0;j<v;j++) {
+	  			if(e[i][j]>0)
+	  		e[j][i]=e[i][j];
+	  		}
+	      }
+	      assertArrayEquals(gc.getEdge, e);
 	}
 	
 	@Test(expected=GraphException.class)
